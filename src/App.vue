@@ -1,6 +1,8 @@
 <script setup>
-import { def } from '@vue/shared';
-import { reactive } from 'vue';
+  import { reactive } from 'vue';
+  import Cabecalho from './components/Cabecalho.vue'
+  import Formulario from './components/Formulario.vue'
+  import ListaDeTarefas from './components/ListaDeTarefas.vue'
 
 
   const estado = reactive({
@@ -54,44 +56,12 @@ import { reactive } from 'vue';
 
 <template>
   <div class="container">
-    <header class="p-5 mb-4 mt-4 bg-light rounded-3">
-      <h1>Minhas tarefas</h1>
-      <p>
-        Você possui {{ getTarefasPendentes().length }} tarefas pendentes
-      </p>
-    </header>
-
-    <form @submit.prevent="cadastraTarefa">
-    <div class="row">
-      <div class="col">
-        <input :value="estado.tarefaTemp" @change="event=> estado.tarefaTemp = event.target.value" required type="text" placeholder="Digite a descrição da tarefa" class="form-control">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-primary" type="submit">Cadastrar</button>
-      </div>
-      <div class="col-md-2">
-        <select class="form-control" @change="event=> estado.filtro = event.target.value">
-          <option value="todas">Todas as tarefas</option>
-          <option value="pendentes">Pendentes</option>
-          <option value="finalizadas">Finalizadas</option>
-        </select>
-      </div>
-    </div>
-  </form>
-  <ul class="list-group mt-4">
-    <li class="list-group-item" v-for="tarefa in getTarefasFiltradas()">
-      <input @change="event=> tarefa.finalizada = event.target.checked" type="checkbox" :checked="tarefa.finalizada" :id="tarefa.titulo">
-      <label :class="{ done: tarefa.finalizada }" class="ms-3" :for="tarefa.titulo" >
-        {{tarefa.titulo}}
-      </label>
-    </li>
-  </ul>
+    <Cabecalho :tarefas-pendentes="getTarefasPendentes().length"/>
+    <Formulario :trocar-filtro="event=> estado.filtro = event.target.value" :tarefa-temp="estado.tarefaTemp" :edita-tarefa-temp="event=> estado.tarefaTemp = event.target.value" :cadastra-tarefa="cadastraTarefa"/>
+    <ListaDeTarefas :tarefas="getTarefasFiltradas()" />
+  
   </div>
   
 </template>
 
-<style scoped>
-  .done {
-    text-decoration: line-through;
-  }
-</style>
+
